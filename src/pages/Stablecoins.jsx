@@ -50,14 +50,14 @@ export default function Stablecoins() {
     setLoading(false);
   }, [PAGE_SIZE, typeFilter, searchQuery]);
 
-  {/*Initial fetch and on filter/search changes*/}
+  // Initial fetch and on filter/search changes
   useEffect(() => {
     setPage(1);
     setHasMore(true);
     fetchStablecoins(1, true);
   }, [typeFilter, searchQuery, fetchStablecoins]);
 
-  {/*Load more pages*/}
+  // Load more pages
   useEffect(() => {
     if (page > 1) {
       fetchStablecoins(page);
@@ -120,11 +120,13 @@ export default function Stablecoins() {
 
         {/* Cards */}
         {loading && page === 1 ? (
-          <div className="loading-container">
-            <div className="loading-dot bg-accent animate-ping" />
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-12 min-h-[500px]">
+            <div className="col-span-full flex justify-center items-center">
+              <div className="loading-dot bg-accent animate-ping w-4 h-4 rounded-full" />
+            </div>
           </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-12">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-12 min-h-[500px]">
             {stablecoins.length > 0 ? (
               stablecoins.map((coin) => (
                 <StablecoinCard key={coin.id} coin={coin} />
@@ -150,15 +152,14 @@ export default function Stablecoins() {
           </div>
         )}
       </div>
-              {/* Disclaimer */}
-        <div className="mt-12 text-xs text-center text-gray-500 max-w-3xl mx-auto">
-          <p>
-            <strong>Disclaimer:</strong> This page curates publicly available information on stablecoins for general awareness only. 
-            No claims are made regarding the accuracy, completeness, or timeliness of the data. Inclusion does not imply endorsement. 
-            Always do your own due diligence before interacting with any stablecoin.
-          </p>
-        </div>
-
+      {/* Disclaimer */}
+      <div className="mt-12 text-xs text-center text-gray-500 max-w-3xl mx-auto">
+        <p>
+          <strong>Disclaimer:</strong> This page curates publicly available information on stablecoins for general awareness only.
+          No claims are made regarding the accuracy, completeness, or timeliness of the data. Inclusion does not imply endorsement.
+          Always do your own due diligence before interacting with any stablecoin.
+        </p>
+      </div>
     </div>
   );
 }

@@ -26,7 +26,7 @@ export default function StablecoinDetail() {
 
   if (loading) return (
     <div className="loading-container">
-      <span className="loading-dot animate-pulse bg-blue-500" />
+      <div className="loading-dot bg-accent animate-ping" />
     </div>
   );
 

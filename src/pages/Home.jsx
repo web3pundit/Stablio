@@ -12,7 +12,7 @@ export default function Home() {
           </button>
         </Link>
         <Link to="/stablecoins">
-          <button className="px-6 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 text-lg">
+          <button className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 text-lg">
             Explore Stablecoins
           </button>
         </Link>

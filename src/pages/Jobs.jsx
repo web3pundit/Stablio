@@ -51,22 +51,22 @@ export default function Jobs() {
   };
 
   return (
-    <div className="page-container bg-muted">
-      <div className="container">
-        <h1 className="page-title text-center">Job Opportunities</h1>
+    <div className="page-container bg-muted px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="page-title text-center mb-6">Job Opportunities</h1>
 
         {loading && page === 1 ? (
-          <div className="loading-container">
-            <div className="loading-dot bg-accent animate-ping" />
+          <div className="loading-container flex justify-center my-8">
+            <div className="loading-dot bg-accent animate-ping w-4 h-4 rounded-full" />
           </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-12">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-12">
             {projects.length > 0 ? (
               projects.map((project, index) => (
-                <div key={`${project.project_name}-${index}`} className="card flex flex-col justify-between">
+                <div key={`${project.project_name}-${index}`} className="card flex flex-col justify-between p-4 rounded-lg shadow-sm bg-white">
                   <div>
                     <h2 className="text-xl font-semibold mb-1">{project.project_name}</h2>
-                    <p className="text-subtle mb-2">{project.description}</p>
+                    <p className="text-sm text-gray-600 mb-2">{project.description}</p>
                     <div className="flex flex-wrap gap-1 mb-3">
                       {project.tags?.map((tag) => (
                         <span
@@ -89,7 +89,7 @@ export default function Jobs() {
                 </div>
               ))
             ) : (
-              <p className="text-center col-span-full text-subtle">No job portals available yet.</p>
+              <p className="text-center col-span-full text-gray-500">No job portals available yet.</p>
             )}
           </div>
         )}
@@ -107,7 +107,7 @@ export default function Jobs() {
         )}
       </div>
 
-      <div className="mt-12 text-xs text-center text-gray-500 max-w-3xl mx-auto">
+      <div className="mt-12 text-xs text-center text-gray-500 max-w-3xl mx-auto px-4">
         <p>
           <strong>Disclaimer:</strong> These listings are aggregated from public sources and official career pages. We do not guarantee the accuracy or availability of specific opportunities. Always verify on the project’s official site.
         </p>

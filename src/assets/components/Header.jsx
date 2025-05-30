@@ -3,7 +3,9 @@ import { useSession } from '../../contexts/useSession';
 import { supabase } from '../../contexts/lib/SupabaseClient';
 import { useEffect, useState, useRef } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
-import logo from './logo.svg'; // adjust path if needed
+import logo from './logo.svg';
+
+// ... all imports remain unchanged
 
 export default function Header() {
   const { session } = useSession();
@@ -128,7 +130,7 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden"
+          className="md:hidden p-2"
           onClick={toggleMenu}
           aria-label="Toggle mobile menu"
           aria-expanded={isOpen}
@@ -138,44 +140,45 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile Dropdown */}
-      <div
+      {/* Mobile Dropdown Menu */}
+      {isOpen && (
+        <div
         id="mobile-menu"
         ref={menuRef}
-        className={`md:hidden transition-all duration-300 ease-in-out transform ${
-          isOpen ? 'max-h-[1000px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95'
-        } overflow-hidden px-4 mt-2 flex flex-col gap-1 text-sm bg-white rounded shadow`}
+        className="absolute top-full left-1/2 transform -translate-x-1/2 md:hidden w-[90%] max-w-sm px-4 py-2 flex flex-col gap-1 text-sm bg-white shadow-lg z-50 max-h-[80vh] overflow-y-auto rounded"
         aria-hidden={!isOpen}
-      >
-        {navLinks}
-        <div className="border-t my-2" />
-        {loading ? (
-          <span className="text-gray-400 block px-4 py-2">Loading...</span>
-        ) : session ? (
-          <>
-            <span className="text-gray-600 block px-4 py-2 truncate">{session?.user?.email}</span>
-            <button
-              onClick={() => {
-                toggleMenu();
-                handleLogout();
-              }}
-              className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded mx-2 mb-2"
-              aria-label="Logout"
+        >
+
+          {navLinks}
+          <div className="border-t my-2" />
+          {loading ? (
+            <span className="text-gray-400 block px-4 py-2">Loading...</span>
+          ) : session ? (
+            <>
+              <span className="text-gray-600 block px-4 py-2 truncate">{session?.user?.email}</span>
+              <button
+                onClick={() => {
+                  toggleMenu();
+                  handleLogout();
+                }}
+                className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded mx-2 mb-2"
+                aria-label="Logout"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <NavLink
+              to="/auth"
+              className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded mx-2 mb-2 block text-center"
+              onClick={toggleMenu}
+              aria-label="Login or Signup"
             >
-              Logout
-            </button>
-          </>
-        ) : (
-          <NavLink
-            to="/auth"
-            className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded mx-2 mb-2 block text-center"
-            onClick={toggleMenu}
-            aria-label="Login or Signup"
-          >
-            Login / Signup
-          </NavLink>
-        )}
-      </div>
+              Login / Signup
+            </NavLink>
+          )}
+        </div>
+      )}
     </header>
   );
 }

@@ -38,9 +38,8 @@ export default function Auth() {
       } else {
         toast.success(type === 'LOGIN' ? 'Logged in successfully!' : 'Signup successful!');
 
-        // Check if the user is an admin
         const { data: { user } } = await supabase.auth.getUser();
-        const adminEmails = ['stinloop@gmail.com']; // Case insensitive match
+        const adminEmails = ['stinloop@gmail.com'];
 
         if (user && adminEmails.includes(user.email?.toLowerCase())) {
           navigate('/admin');
@@ -57,39 +56,48 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-50 to-white">
       <Toaster position="top-center" />
-      <div className="card max-w-md w-full">
-        <h2 className="page-title text-center">Login / Signup</h2>
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-8 space-y-6 border border-gray-100">
+        <h2 className="text-2xl font-bold text-center text-gray-800">Welcome</h2>
+        <p className="text-center text-sm text-gray-500 mb-4">
+          Login or sign up to continue
+        </p>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="input mb-4"
-          disabled={loading}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="input mb-6"
-          disabled={loading}
-        />
+        <div className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={loading}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={loading}
+          />
+        </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 pt-2">
           <button
             onClick={() => handleAuth('LOGIN')}
-            className={`btn-primary w-full ${loading ? 'bg-blue-300 cursor-not-allowed' : ''}`}
+            className={`w-full px-4 py-2 rounded-lg text-white transition-all duration-200 ${
+              loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+            }`}
             disabled={loading}
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
           <button
             onClick={() => handleAuth('SIGNUP')}
-            className={`btn-success w-full ${loading ? 'bg-green-300 cursor-not-allowed' : ''}`}
+            className={`w-full px-4 py-2 rounded-lg text-white transition-all duration-200 ${
+              loading ? 'bg-green-300 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+            }`}
             disabled={loading}
           >
             {loading ? 'Signing up...' : 'Signup'}

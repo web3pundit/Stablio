@@ -33,11 +33,8 @@ export default function Experts() {
         console.error('Error fetching experts:', error);
       } else if (data) {
         setExperts(prev => {
-          const combined = [...prev, ...data];
           const uniqueMap = new Map();
-          for (const expert of combined) {
-            uniqueMap.set(expert.id, expert);
-          }
+          [...prev, ...data].forEach(expert => uniqueMap.set(expert.id, expert));
           return Array.from(uniqueMap.values());
         });
 
@@ -64,36 +61,33 @@ export default function Experts() {
         <h1 className="heading">Industry Experts</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {experts.map((expert) => (
+          {experts.map(expert => (
             <ExpertCard key={expert.id} expert={expert} />
           ))}
         </div>
 
         {loading && (
           <div className="loading-container">
-            <div className="loading-dot bg-green-500 animate-ping"></div>
+            <div className="loading-dot bg-accent animate-ping" />
           </div>
         )}
 
         {hasMore && !loading && (
           <div className="text-center">
-            <button
-              onClick={handleLoadMore}
-              className="button-success"
-            >
+            <button onClick={handleLoadMore} className="btn btn-primary">
               Load More
             </button>
           </div>
         )}
-      </div>
-       {/* Disclaimer */}
+
         <div className="mt-12 text-xs text-center text-gray-500 max-w-3xl mx-auto">
           <p>
-            <strong>Disclaimer:</strong> The individuals featured on this page are included based on their public activity related to stablecoins, 
-            primarily via Twitter. Roles assigned are observational and do not represent formal affiliations, endorsements, or professional validation. 
+            <strong>Disclaimer:</strong> The individuals featured on this page are included based on their public activity related to stablecoins,
+            primarily via Twitter. Roles assigned are observational and do not represent formal affiliations, endorsements, or professional validation.
             Always verify credentials independently.
           </p>
         </div>
+      </div>
     </div>
   );
 }

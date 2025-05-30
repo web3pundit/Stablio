@@ -3,38 +3,65 @@ import { supabase } from '../contexts/lib/SupabaseClient';
 import { Filter } from 'lucide-react';
 
 export default function RegulatoryClarity() {
+  const PAGE_SIZE = 9;
+
   const [regulations, setRegulations] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-  // Fetch regulations data
-  const fetchRegulations = useCallback(async () => {
+  const fetchRegulations = useCallback(async (reset = false) => {
     setLoading(true);
     setError(null);
 
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
     const { data, error } = await supabase
       .from('regulations')
-      .select('*')
-      .order('date', { ascending: false });
+      .select('*', { count: 'exact' })
+      .order('date', { ascending: false })
+      .range(from, to);
 
     if (error) {
       console.error(error);
       setError('Failed to load regulations. Please try again later.');
-      setRegulations([]);
+      if (reset) setRegulations([]);
     } else {
-      setRegulations(data || []);
+      if (reset) {
+        setRegulations(data || []);
+      } else {
+        setRegulations(prev => [...prev, ...(data || [])]);
+      }
+      if (!data || data.length < PAGE_SIZE) {
+        setHasMore(false);
+      } else {
+        setHasMore(true);
+      }
     }
 
     setLoading(false);
-  }, []);
+  }, [page]);
 
-  // Initial fetch
   useEffect(() => {
-    fetchRegulations();
-  }, [fetchRegulations]);
+    fetchRegulations(page === 1);
+    // eslint-disable-next-line
+  }, [page]);
 
-  // Filtered regulations based on selected status
+  // Reset pagination when filter changes
+  useEffect(() => {
+    setPage(1);
+    setHasMore(true);
+    setRegulations([]);
+    setError(null);
+    setLoading(false);
+    // Fetch first page for new filter
+    fetchRegulations(true);
+    // eslint-disable-next-line
+  }, [selectedStatus]);
+
   const filtered = selectedStatus === 'All'
     ? regulations
     : regulations.filter(
@@ -42,7 +69,6 @@ export default function RegulatoryClarity() {
           r.status?.trim().toLowerCase() === selectedStatus.trim().toLowerCase()
       );
 
-  // Styling helpers
   const statusStyle = (status) => {
     switch (status?.trim()) {
       case 'Passed':
@@ -75,13 +101,19 @@ export default function RegulatoryClarity() {
     }
   };
 
+  const handleLoadMore = () => {
+    if (!loading && hasMore) {
+      setPage(prev => prev + 1);
+    }
+  };
+
   return (
     <div className="page-container bg-muted">
       <div className="container">
         {/* Header */}
         <header className="border-b border-gray-200 pb-4 mb-6">
           <h1 className="page-title text-center">Global Stablecoin Regulation Tracker</h1>
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2">
             <Filter size={18} />
             <select
               className="select"
@@ -99,45 +131,60 @@ export default function RegulatoryClarity() {
 
         {/* Main Content */}
         <main className="mb-12">
-          {loading ? (
-            <div className="loading-container">
-              <div className="loading-dot bg-accent animate-ping" />
+          {loading && page === 1 ? (
+            <div className="border-l-2 border-blue-200 pl-4 space-y-6 min-h-[500px] flex items-center justify-center">
+              <div className="loading-dot bg-accent animate-ping w-4 h-4 rounded-full" />
             </div>
           ) : error ? (
             <p className="text-center text-red-600">{error}</p>
           ) : filtered.length === 0 ? (
-            <p className="text-center text-subtle">No regulations found for the selected filter.</p>
-          ) : (
-        <div className="border-l-2 border-blue-200 pl-4 space-y-6">
-               {filtered.map((item) => (
-                <article key={item.id} className="relative ml-2 pl-4 card">
-                  <div className="absolute left-[-20px] top-2 w-3 h-3 bg-blue-500 rounded-full"></div>
-
-                  <header className="flex justify-between items-center mb-1">
-                    <h2 className="text-xl font-semibold">{item.country}</h2>
-                    <span className={`text-sm px-3 py-1 rounded-full ${statusStyle(item.status)}`}>
-                      {item.status || 'Unknown'}
-                    </span>
-                  </header>
-
-                  <h3 className="text-subtle font-medium">{item.regulation}</h3>
-                  <p className="text-muted mt-2">{item.summary || 'No summary available.'}</p>
-
-                  <div className="flex gap-2 flex-wrap mt-3">
-                    {item.scope && (
-                      <span className={`tag px-2 py-1 rounded-full text-sm ${scopeStyle(item.scope)}`}>
-                        {item.scope}
-                      </span>
-                    )}
-                  </div>
-
-                  <footer className="text-sm text-gray-500 mt-3">
-                    Date:{' '}
-                    {item.date ? new Date(item.date).toLocaleDateString() : 'Unknown'}
-                  </footer>
-                </article>
-              ))}
+            <div className="border-l-2 border-blue-200 pl-4 space-y-6 min-h-[500px] flex items-center justify-center">
+              <p className="text-center text-subtle">No regulations found for the selected filter.</p>
             </div>
+          ) : (
+            <>
+              <div className="border-l-2 border-blue-200 pl-4 space-y-6 min-h-[500px]">
+                {filtered.map((item) => (
+                  <article key={item.id} className="relative ml-2 pl-4 card">
+                    <div className="absolute left-[-20px] top-2 w-3 h-3 bg-blue-500 rounded-full" />
+
+                    <header className="flex justify-between items-center mb-1">
+                      <h2 className="text-xl font-semibold">{item.country}</h2>
+                      <span className={`text-sm px-3 py-1 rounded-full ${statusStyle(item.status)}`}>
+                        {item.status || 'Unknown'}
+                      </span>
+                    </header>
+
+                    <h3 className="text-subtle font-medium">{item.regulation}</h3>
+                    <p className="text-muted mt-2">{item.summary || 'No summary available.'}</p>
+
+                    <div className="flex gap-2 flex-wrap mt-3">
+                      {item.scope && (
+                        <span className={`tag px-2 py-1 rounded-full text-sm ${scopeStyle(item.scope)}`}>
+                          {item.scope}
+                        </span>
+                      )}
+                    </div>
+
+                    <footer className="text-sm text-gray-500 mt-3">
+                      Date: {item.date ? new Date(item.date).toLocaleDateString() : 'Unknown'}
+                    </footer>
+                  </article>
+                ))}
+              </div>
+              {hasMore && !loading && (
+                <div className="text-center mt-6">
+                  <button onClick={handleLoadMore} className="btn btn-primary">
+                    Load More
+                  </button>
+                </div>
+              )}
+              {loading && page > 1 && (
+                <div className="loading-container mt-4">
+                  <div className="loading-dot bg-accent animate-ping w-4 h-4 rounded-full" />
+                </div>
+              )}
+            </>
           )}
         </main>
 

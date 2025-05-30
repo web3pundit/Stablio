@@ -4,29 +4,27 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
- // tailwind.config.js
-
   theme: {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#3b82f6', // blue-500
-          dark: '#2563eb',    // blue-600
-          light: '#93c5fd',   // blue-300
+          DEFAULT: '#3b82f6',
+          dark: '#2563eb',
+          light: '#93c5fd',
         },
         secondary: {
-          DEFAULT: '#10b981', // green-500
-          dark: '#059669',    // green-600
-          light: '#6ee7b7',   // green-300
+          DEFAULT: '#10b981',
+          dark: '#059669',
+          light: '#6ee7b7',
         },
         base: {
           light: '#ffffff',
-          DEFAULT: '#f9fafb', // gray-100
-          dark: '#1f2937',    // gray-800
+          DEFAULT: '#f9fafb',
+          dark: '#1f2937',
         },
         text: {
-          DEFAULT: '#1f2937', // gray-800
-          muted: '#6b7280',   // gray-500
+          DEFAULT: '#1f2937',
+          muted: '#6b7280',
         },
       },
       fontFamily: {
@@ -39,4 +37,3 @@ export default {
   },
   plugins: [],
 };
-
