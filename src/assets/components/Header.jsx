@@ -3,7 +3,7 @@ import { useSession } from '../../contexts/useSession';
 import { supabase } from '../../contexts/lib/SupabaseClient';
 import { useEffect, useState, useRef } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
-import logo from './logo.png'; // adjust path if needed
+import logo from './logo.svg'; // adjust path if needed
 
 export default function Header() {
   const { session } = useSession();
@@ -76,7 +76,7 @@ export default function Header() {
           <img
             src={logo}
             alt="Stablio"
-            className="h-[20rem] w-auto object-contain"
+            className="h-[5rem] w-auto object-contain"
           />
         </Link>
 
