@@ -20,11 +20,13 @@ export default function Events() {
 
     const from = pageNum * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
+    const today = new Date().toISOString();
 
     try {
       let query = supabase
         .from('events')
         .select('*')
+        .gte('date', today)
         .order('date', { ascending: true })
         .range(from, to);
 
@@ -35,10 +37,9 @@ export default function Events() {
       const { data, error } = await query;
       if (error) throw error;
 
+      if (pageNum === 0) seenIds.current = new Set();
+
       const newEvents = (data || []).filter((event) => {
-        if (pageNum === 0) {
-          seenIds.current = new Set();
-        }
         if (seenIds.current.has(event.id)) return false;
         seenIds.current.add(event.id);
         return true;
@@ -57,10 +58,9 @@ export default function Events() {
   };
 
   useEffect(() => {
-    fetchEvents(0, typeFilter);
-  }, [typeFilter]);
-
-  useEffect(() => {
+    setEvents([]);
+    setPage(0);
+    setHasMore(true);
     fetchEvents(0, typeFilter);
   }, [typeFilter]);
 
@@ -69,6 +69,9 @@ export default function Events() {
       fetchEvents(page, typeFilter);
     }
   };
+
+  const now = new Date();
+  const pastEvents = events.filter(e => new Date(e.date) < now);
 
   return (
     <div className="page-container bg-muted px-4 sm:px-6 lg:px-8">
@@ -97,33 +100,54 @@ export default function Events() {
             <div className="loading-dot bg-accent animate-ping w-4 h-4 rounded-full" />
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {events.length > 0 ? (
-              events.map((event) => (
-                <div key={event.id} className="card flex flex-col justify-between p-4 rounded-lg shadow-sm bg-white">
-                  <div>
-                    <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
-                    <span className="tag mb-2 inline-block">{event.type}</span>
-                    <p className="text-sm text-gray-600 mb-1">
-                      {new Date(event.date).toLocaleDateString()} • {event.location}
-                    </p>
+          <>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-12">
+              {events.length > 0 ? (
+                events.map((event) => (
+                  <div key={event.id} className="card flex flex-col justify-between p-4 rounded-lg shadow-sm bg-white">
+                    <div>
+                      <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
+                      <span className="tag mb-2 inline-block">{event.type}</span>
+                      <p className="text-sm text-gray-600 mb-1">
+                        {new Date(event.date).toLocaleDateString()} • {event.location}
+                      </p>
+                    </div>
+                    <a
+                      href={event.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link mt-3 inline-block"
+                    >
+                      View Details
+                    </a>
                   </div>
-                  <a
-                    href={event.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="link mt-3 inline-block"
-                  >
-                    View Details
-                  </a>
+                ))
+              ) : (
+                <p className="text-center col-span-full text-gray-500">
+                  No upcoming events found.
+                </p>
+              )}
+            </div>
+
+            {pastEvents.length > 0 && (
+              <>
+                <h2 className="text-2xl font-semibold mb-4 text-center">Past Events</h2>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 opacity-70 italic">
+                  {pastEvents.map((event) => (
+                    <div key={event.id} className="card p-4 rounded-lg shadow-sm bg-white">
+                      <div>
+                        <h2 className="text-lg font-semibold mb-1">{event.title}</h2>
+                        <span className="tag mb-1 inline-block">{event.type}</span>
+                        <p className="text-sm text-gray-500 mb-1">
+                          {new Date(event.date).toLocaleDateString()} • {event.location}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))
-            ) : (
-              <p className="text-center col-span-full text-gray-500">
-                No events found for the selected type.
-              </p>
+              </>
             )}
-          </div>
+          </>
         )}
 
         {hasMore && events.length > 0 && !error && (
