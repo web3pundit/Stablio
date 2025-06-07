@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../contexts/lib/SupabaseClient';
 import { Filter } from 'lucide-react';
+import { Helmet } from 'react-helmet';
+
 
 export default function RegulatoryClarity() {
   const PAGE_SIZE = 9;
@@ -109,28 +111,55 @@ export default function RegulatoryClarity() {
 
   return (
     <div className="page-container bg-muted">
+      <Helmet>
+  <title>Stablecoin Regulation Tracker | Stablio</title>
+  <meta name="description" content="Track global stablecoin regulations in one place. Filter by country or status and stay updated on the latest laws, proposals, and compliance changes." />
+</Helmet>
       <div className="container">
         {/* Header */}
-        <header className="border-b border-gray-200 pb-4 mb-6">
-          <h1 className="page-title text-center">Global Stablecoin Regulation Tracker</h1>
-          <div className="flex items-center gap-2">
-            <Filter size={18} />
-            <select
-              className="select"
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
+             <header className="border-b border-gray-200 pb-4 mb-6">
+          <h1 className="page-title text-center text-3xl font-bold mb-2">
+            Track Stablecoin Regulations Worldwide
+          </h1>
+          <p className="text-center text-base !text-gray-700 max-w-2xl mx-auto mb-4">
+            Stay informed on the latest stablecoin laws, proposals, and policy updates from around the globe. 
+            Filter by status to quickly find what matters to you.
+          </p>
+          
+          <div className="flex flex-col items-center mt-2">
+            <span className="text-xs text-gray-500">
+              <strong>Why use this tracker?</strong>  
+              <span className="ml-1">
+                Get a curated, filterable snapshot of global stablecoin policy—no more endless searching or scattered news.
+              </span>
+            </span>
+            <a
+              href="#main-content"
+              className="mt-3 px-5 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
             >
-              {['All', 'Passed', 'Under Review', 'Pending', 'Rejected'].map((status) => (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              ))}
-            </select>
+              Explore Regulatory Updates
+            </a>
+          </div>
+          <div className="flex items-start gap-2 mb-2">
+            <div className="flex items-center gap-2">
+              <Filter size={18} />
+              <select
+                className="select"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+              >
+                {['All', 'Passed', 'Under Review', 'Pending', 'Rejected'].map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </header>
 
         {/* Main Content */}
-        <main className="mb-12">
+        <main id="main-content" className="mb-12">
           {loading && page === 1 ? (
             <div className="border-l-2 border-blue-200 pl-4 space-y-6 min-h-[500px] flex items-center justify-center">
               <div className="loading-dot bg-accent animate-ping w-4 h-4 rounded-full" />
@@ -195,6 +224,7 @@ export default function RegulatoryClarity() {
             While we aim to reflect the latest updates accurately, this content does not constitute legal advice or official government positions.
             Always consult primary legal sources or qualified professionals before making decisions based on regulation-related content.
           </p>
+          
         </footer>
       </div>
     </div>

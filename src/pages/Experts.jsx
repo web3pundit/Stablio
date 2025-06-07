@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../contexts/lib/SupabaseClient';
 import ExpertCard from '../assets/components/ExpertCard';
+import { Helmet } from 'react-helmet';
 
 export default function Experts() {
   const PAGE_SIZE = 9;
@@ -56,11 +57,32 @@ export default function Experts() {
   };
 
   return (
-    <div className="bg-muted min-h-screen w-full">
-      <div className="page-container">
-        <h1 className="heading">Industry Experts</h1>
+    <div className="container">
+      <Helmet>
+  <title>Stablecoin Industry Leaders | Stablio</title>
+  <meta
+    name="description"
+    content="Browse a curated directory of stablecoin Indeustry Leaders Twitter/X Acounts. Find researchers, developers, and analysts to follow or contact for insights and collaboration."
+  />
+</Helmet>
+      <>
+        <h1 className="page-title text-center text-3xl font-bold mb-2">
+          Discover Leading Stablecoin Industry Leaders.
+        </h1>
+        <p className="text-center text-base text-gray-700 max-w-2xl mx-auto mb-6">
+          Find and connect with trusted voices in the stablecoin ecosystem. Filter by specialty or search for experts to get insights, advice, or collaboration.
+        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="flex justify-center mb-8">
+          <a
+            href="#main-content"
+            className="px-5 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
+          >
+            Find Who To Follow
+          </a>
+        </div>
+
+        <div id="main-content" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {experts.map(expert => (
             <ExpertCard key={expert.id} expert={expert} />
           ))}
@@ -82,12 +104,11 @@ export default function Experts() {
 
         <div className="mt-12 text-xs text-center text-gray-500 max-w-3xl mx-auto">
           <p>
-            <strong>Disclaimer:</strong> The individuals featured on this page are included based on their public activity related to stablecoins,
-            primarily via Twitter. Roles assigned are observational and do not represent formal affiliations, endorsements, or professional validation.
-            Always verify credentials independently.
+            <strong>Disclaimer:</strong> This directory is curated for informational purposes. The idivndividuals featured are included based on their public activity related to stablecoins. Roles assigned are observational and do not represent formal affiliations, endorsements, or professional validation. Always verify credentials independently before engaging with any expert.
           </p>
+          
         </div>
-      </div>
+      </>
     </div>
   );
 }

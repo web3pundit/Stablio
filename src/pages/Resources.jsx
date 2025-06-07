@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import ResourceCard from '../contexts/lib/ResourceCard';
 import { supabase } from '../contexts/lib/SupabaseClient';
+import { Helmet } from 'react-helmet';
 
 export default function Resources() {
   const PAGE_SIZE = 9;
@@ -119,121 +120,157 @@ export default function Resources() {
     }
   };
 
-  return (
-    <div className="p-4 bg-gray-100 min-h-screen text-gray-800">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">Stablecoin Resources</h1>
+return (
+  <div className="p-4 bg-gray-100 min-h-screen text-gray-800">
+    <Helmet>
+   <title>Stablecoin Resources | Stablio</title>
+   <meta name="description" content="Find the best stablecoin resources, research, and guides—curated for users, developers, and analysts. Explore trusted content and tools for the stablecoin community." />
+</Helmet>
 
-        {/* Toggle: Latest vs Discover */}
-        <div className="flex justify-center gap-4 mb-4">
-          <button
-            onClick={() => setSortMode('latest')}
-            className={`px-4 py-2 rounded shadow ${sortMode === 'latest' ? 'bg-blue-600 text-white' : 'bg-white border text-gray-800'}`}
+    <div className="max-w-7xl mx-auto">
+
+      {/* Headline & Intro */}
+      <section className="mb-8">
+        <h1 className="text-4xl font-extrabold text-center mb-3 tracking-tight">
+          Explore Curated Stablecoin Resources
+        </h1>
+        <p className="text-lg text-center text-gray-700 max-w-2xl mx-auto mb-2">
+          Discover trusted articles, research, and tools about stablecoins—all in one place. Save time and get credible insights, whether you’re learning, building, or analyzing.
+        </p>
+        <div className="flex justify-center">
+          <span className="inline-block bg-blue-50 border border-blue-200 rounded px-4 py-2 text-sm text-blue-800 font-medium shadow-sm">
+            Find resources for users, developers, analysts, and more.
+          </span>
+        </div>
+      </section>
+
+      {/* Value Proposition */}
+      <section className="mb-10">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm px-6 py-5 max-w-3xl mx-auto">
+          <ul className="space-y-2 text-gray-800 text-base">
+            <li>
+              <span className="font-semibold text-blue-700">• All in one place:</span> No more endless Googling—access up-to-date, expert-curated stablecoin resources.
+            </li>
+            <li>
+              <span className="font-semibold text-blue-700">• For everyone:</span> Whether you’re a crypto-curious user, developer, analyst, or policymaker, filter by audience and type to find what matters to you.
+            </li>
+            <li>
+              <span className="font-semibold text-blue-700">• Actionable insights:</span> Explore, track, and compare stablecoin knowledge—fast.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Toggle: Latest vs Discover */}
+      <div className="flex justify-center gap-4 mb-4">
+        <button
+          onClick={() => setSortMode('latest')}
+          className={`px-4 py-2 rounded shadow ${sortMode === 'latest' ? 'bg-blue-600 text-white' : 'bg-white border text-gray-800'}`}
+        >
+          Latest
+        </button>
+        <button
+          onClick={() => setSortMode('discover')}
+          className={`px-4 py-2 rounded shadow ${sortMode === 'discover' ? 'bg-blue-600 text-white' : 'bg-white border text-gray-800'}`}
+        >
+          Discover
+        </button>
+      </div>
+
+      {/* Search */}
+      <div className="flex justify-center items-center gap-2 mb-6">
+        <input
+          type="text"
+          placeholder="Search stablecoin resources..."
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          onKeyDown={handleKeyPress}
+          className="w-full max-w-md p-2 border rounded bg-white text-gray-800 focus:ring-2 focus:ring-blue-500 shadow-sm"
+        />
+        <button
+          onClick={handleSearch}
+          className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700"
+        >
+          Search
+        </button>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-4 justify-center mb-8">
+        <div>
+          <label className="block mb-1 text-sm font-semibold text-gray-800">Audience:</label>
+          <select
+            value={audienceFilter}
+            onChange={(e) => setAudienceFilter(e.target.value)}
+            className="p-2 border rounded bg-white text-gray-800"
           >
-            Latest
-          </button>
-          <button
-            onClick={() => setSortMode('discover')}
-            className={`px-4 py-2 rounded shadow ${sortMode === 'discover' ? 'bg-blue-600 text-white' : 'bg-white border text-gray-800'}`}
-          >
-            Discover
-          </button>
+            <option value="all">All</option>
+            <option value="Users">Users</option>
+            <option value="Developers">Developers</option>
+            <option value="Both">Both</option>
+          </select>
         </div>
 
-        {/* Search */}
-        <div className="flex justify-center items-center gap-2 mb-6">
-          <input
-            type="text"
-            placeholder="Search resources..."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={handleKeyPress}
-            className="w-full max-w-md p-2 border rounded bg-white text-gray-800 focus:ring-2 focus:ring-blue-500 shadow-sm"
-          />
-          <button
-            onClick={handleSearch}
-            className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700"
+        <div>
+          <label className="block mb-1 text-sm font-semibold text-gray-800">Type:</label>
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="p-2 border rounded bg-white text-gray-800"
           >
-            Search
-          </button>
-        </div>
-
-        {/* Filters */}
-        <div className="flex flex-wrap gap-4 justify-center mb-8">
-          <div>
-            <label className="block mb-1 text-sm font-semibold text-gray-800">Audience:</label>
-            <select
-              value={audienceFilter}
-              onChange={(e) => setAudienceFilter(e.target.value)}
-              className="p-2 border rounded bg-white text-gray-800"
-            >
-              <option value="all">All</option>
-              <option value="Users">Users</option>
-              <option value="Developers">Developers</option>
-              <option value="Both">Both</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block mb-1 text-sm font-semibold text-gray-800">Type:</label>
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="p-2 border rounded bg-white text-gray-800"
-            >
-              <option value="all">All</option>
-              <option value="Article">Article</option>
-              <option value="Video">Video</option>
-              <option value="Tool">Tool</option>
-              <option value="Documentation">Documentation</option>
-              <option value="Research">Research</option>
-              <option value="Podcast">Podcast</option>
-              <option value="Blockchain">Blockchain</option>
-              <option value="Speech">Speech</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Cards */}
-        {loading && page === 1 ? (
-          <div className="flex justify-center items-center min-h-[50vh]">
-            <div className="w-5 h-5 bg-blue-500 rounded-full animate-ping"></div>
-          </div>
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
-            {resources.length > 0 ? (
-              resources.map((res) => (
-                <ResourceCard key={res.id} resource={res} />
-              ))
-            ) : (
-              <p className="text-center col-span-full text-gray-600">
-                No resources found. Try adjusting filters or refining your search.
-              </p>
-            )}
-          </div>
-        )}
-
-        {/* Load More */}
-        {hasMore && resources.length > 0 && (
-          <div className="text-center">
-            <button
-              onClick={handleLoadMore}
-              disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 disabled:opacity-50"
-            >
-              {loading ? 'Loading...' : 'Load More'}
-            </button>
-          </div>
-        )}
-
-        {/* Disclaimer */}
-        <div className="mt-12 text-xs text-center text-gray-500 max-w-3xl mx-auto">
-          <p>
-            <strong>Disclaimer:</strong> All resources curated here—including articles, videos, tools, documents, research, podcasts, and speeches—are sourced from third-party creators and platforms. 
-            Copyright belongs to their respective owners. This platform simply aggregates them for informational and educational purposes.
-          </p>
+            <option value="all">All</option>
+            <option value="Article">Article</option>
+            <option value="Video">Video</option>
+            <option value="Tool">Tool</option>
+            <option value="Documentation">Documentation</option>
+            <option value="Research">Research</option>
+            <option value="Podcast">Podcast</option>
+            <option value="Blockchain">Blockchain</option>
+            <option value="Speech">Speech</option>
+          </select>
         </div>
       </div>
+
+      {/* Cards */}
+      {loading && page === 1 ? (
+        <div className="flex justify-center items-center min-h-[50vh]">
+          <div className="w-5 h-5 bg-blue-500 rounded-full animate-ping"></div>
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
+          {resources.length > 0 ? (
+            resources.map((res) => (
+              <ResourceCard key={res.id} resource={res} />
+            ))
+          ) : (
+            <p className="text-center col-span-full text-gray-600">
+              No resources found. Try adjusting filters or refining your search.
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Load More */}
+      {hasMore && resources.length > 0 && (
+        <div className="text-center">
+          <button
+            onClick={handleLoadMore}
+            disabled={loading}
+            className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading ? 'Loading...' : 'Load More'}
+          </button>
+        </div>
+      )}
+
+      {/* Disclaimer */}
+      <div className="mt-12 text-xs text-center text-gray-500 max-w-3xl mx-auto">
+        <p>
+          <strong>Disclaimer:</strong> All resources curated here—including articles, videos, tools, documents, research, podcasts, and speeches—are sourced from third-party creators and platforms.
+          Copyright belongs to their respective owners. This platform simply aggregates them for informational and educational purposes.
+        </p>
+      </div>
     </div>
-  );
+  </div>
+);
 }

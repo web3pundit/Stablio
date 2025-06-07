@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import Landing from './pages/Landing';
 import Home from './pages/Home';
 import Auth from './pages/Auth';
 import Bookmark from './pages/MyBookmarks';
@@ -32,7 +33,15 @@ function App() {
                 path="/"
                 element={
                   <Layout>
-                    <Resources />
+                    <Landing />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/home"
+                element={
+                  <Layout>
+                    <Home />
                   </Layout>
                 }
               />

@@ -70,9 +70,10 @@ export default function Header() {
 
   const navLinks = (
     <>
+      <NavLink to="/home" className={linkClasses} onClick={closeMobileMenu}>Home</NavLink>
       <NavLink to="/resources" className={linkClasses} onClick={closeMobileMenu}>Resources</NavLink>
       <NavLink to="/stablecoins" className={linkClasses} onClick={closeMobileMenu}>Stablecoins</NavLink>
-      <NavLink to="/experts" className={linkClasses} onClick={closeMobileMenu}>Experts</NavLink>
+      <NavLink to="/experts" className={linkClasses} onClick={closeMobileMenu}>Who To Follow</NavLink>
       <NavLink to="/regulatory" className={linkClasses} onClick={closeMobileMenu}>Regulatory Clarity</NavLink>
       <NavLink to="/jobs" className={linkClasses} onClick={closeMobileMenu}>Jobs</NavLink>
       <NavLink to="/events" className={linkClasses} onClick={closeMobileMenu}>Events</NavLink>
@@ -85,9 +86,9 @@ export default function Header() {
     <header className="relative bg-gray-100 shadow-md h-20 flex items-center" role="banner">
       <div className="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
         <Link
-          to="/"
+          to="/home"
           className="flex items-center space-x-2 shrink-0"
-          aria-label="Home"
+          aria-label="home"
         >
           <img
             src={logo}

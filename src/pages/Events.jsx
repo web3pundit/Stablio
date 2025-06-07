@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '../contexts/lib/SupabaseClient';
 import { Filter } from 'lucide-react';
+import { Helmet } from 'react-helmet';
 
 const PAGE_SIZE = 9;
 const FILTER_OPTIONS = ['All', 'Conference', 'Summit', 'Festival', 'X space'];
@@ -71,12 +72,34 @@ export default function Events() {
   };
 
   const now = new Date();
+  const upcomingEvents = events.filter(e => new Date(e.date) >= now);
   const pastEvents = events.filter(e => new Date(e.date) < now);
 
   return (
     <div className="page-container bg-muted px-4 sm:px-6 lg:px-8">
+      <Helmet>
+    <title>Stablecoin Events | Stablio</title>
+    <meta name="description" content="Find upcoming stablecoin events, conferences, and summits. Stay connected with the stablecoin community—browse, filter, and track key industry happenings in one place." />
+</Helmet>
+
+
       <main className="max-w-7xl mx-auto">
-        <h1 className="page-title text-center mb-8">Upcoming Events</h1>
+        <h1 className="page-title text-center mb-8">
+          Discover Stablecoin Events & Conferences
+        </h1>
+
+        <p className="text-center text-base text-gray-700 max-w-2xl mx-auto mb-6">
+          Stay informed about the latest stablecoin events, summits, and online discussions. Filter by type or browse to find opportunities to learn, network, and connect with the community.
+        </p>
+
+        <div className="flex justify-center mb-8">
+          <a
+            href="#main-content"
+            className="px-5 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
+          >
+            See Upcoming Events
+          </a>
+        </div>
 
         <div className="flex items-center gap-2 mb-6">
           <Filter size={18} />
@@ -95,17 +118,22 @@ export default function Events() {
 
         {error && <p className="text-red-600 text-center mb-4">{error}</p>}
 
-        {loading && events.length === 0 ? (
+        {loading && upcomingEvents.length === 0 ? (
           <div className="loading-container flex justify-center my-8">
             <div className="loading-dot bg-accent animate-ping w-4 h-4 rounded-full" />
           </div>
         ) : (
           <>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-12">
-              {events.length > 0 ? (
-                events.map((event) => (
+              {upcomingEvents.length > 0 ? (
+                upcomingEvents.map((event) => (
                   <div key={event.id} className="card flex flex-col justify-between p-4 rounded-lg shadow-sm bg-white">
                     <div>
+                      <img
+                    src={event.thumbnail}
+                    alt={event.title}
+                    className="w-full h-36 object-cover rounded-t-xl mb-2 hover:scale-105"
+                  />
                       <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
                       <span className="tag mb-2 inline-block">{event.type}</span>
                       <p className="text-sm text-gray-600 mb-1">
@@ -118,6 +146,7 @@ export default function Events() {
                       rel="noopener noreferrer"
                       className="link mt-3 inline-block"
                     >
+                      
                       View Details
                     </a>
                   </div>
@@ -150,7 +179,7 @@ export default function Events() {
           </>
         )}
 
-        {hasMore && events.length > 0 && !error && (
+        {hasMore && upcomingEvents.length > 0 && !error && (
           <div className="text-center mt-8">
             <button onClick={loadMore} disabled={loading} className="btn btn-primary">
               {loading ? 'Loading...' : 'Load More'}
@@ -160,11 +189,9 @@ export default function Events() {
 
         <div className="mt-12 text-xs text-center text-gray-500 max-w-3xl mx-auto px-4">
           <p>
-            <strong>Disclaimer:</strong> The events listed on this page are curated from publicly
-            available sources. While we strive for accuracy, dates, locations, and details are
-            subject to change. Always verify event information with the official organizer before
-            making travel or registration plans.
+            <strong>Disclaimer:</strong> Event details are provided for informational purposes only. Please confirm event information with official sources before making plans or travel arrangements.
           </p>
+          
         </div>
       </main>
     </div>

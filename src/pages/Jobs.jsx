@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../contexts/lib/SupabaseClient';
-
+import { Helmet } from 'react-helmet';
 const PAGE_SIZE = 9;
 
 export default function Jobs() {
@@ -14,9 +14,10 @@ export default function Jobs() {
     const from = (pageToFetch - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
 
+    // Include thumbnail in select
     const { data, error } = await supabase
       .from('jobs')
-      .select('project_name, description, careers_url, tags')
+      .select('project_name, description, careers_url, tags, thumbnail')
       .order('project_name', { ascending: true })
       .range(from, to);
 
@@ -50,10 +51,20 @@ export default function Jobs() {
     }
   };
 
+  
   return (
     <div className="page-container bg-muted px-4 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>Job Opportunity By Stablecoin Projects | Stablio</title>
+        <meta name="description" content="Browse stablecoin job opportunities from top projects and companies. Find open roles in development, research, compliance, and more—curated for the stablecoin community." />
+      </Helmet>
+
       <div className="max-w-7xl mx-auto">
-        <h1 className="page-title text-center mb-6">Job Opportunities</h1>
+        <h1 className="page-title text-center mb-6">Explore Stablecoin Job Opportunities</h1>
+
+        <p className="text-center text-base text-gray-700 max-w-2xl mx-auto mb-8">
+          Browse open roles at leading stablecoin projects and companies. Find your next opportunity in development, research, compliance, community, and more.
+        </p>
 
         {loading && page === 1 ? (
           <div className="loading-container flex justify-center my-8">
@@ -65,6 +76,11 @@ export default function Jobs() {
               projects.map((project, index) => (
                 <div key={`${project.project_name}-${index}`} className="card flex flex-col justify-between p-4 rounded-lg shadow-sm bg-white">
                   <div>
+                    <img
+                      src={project.thumbnail}
+                      alt={project.project_name || "Project Thumbnail"}
+                      className="w-full h-36 object-cover rounded-t-xl mb-2 hover:scale-105"
+                    />
                     <h2 className="text-xl font-semibold mb-1">{project.project_name}</h2>
                     <p className="text-sm text-gray-600 mb-2">{project.description}</p>
                     <div className="flex flex-wrap gap-1 mb-3">
