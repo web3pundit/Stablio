@@ -122,13 +122,13 @@ export default function RegulatoryClarity() {
             Track Stablecoin Regulations Worldwide
           </h1>
           <p className="text-center text-base !text-gray-700 max-w-2xl mx-auto mb-4">
-            Stay informed on the latest stablecoin laws, proposals, and policy updates from around the globe. 
+            Stay informed on the latest stablecoin laws, proposals, and policy updates from around the globe.
             Filter by status to quickly find what matters to you.
           </p>
-          
+
           <div className="flex flex-col items-center mt-2">
             <span className="text-xs text-gray-500">
-              <strong>Why use this tracker?</strong>  
+              <strong>Why use this tracker?</strong>
               <span className="ml-1">
                 Get a curated, filterable snapshot of global stablecoin policy—no more endless searching or scattered news.
               </span>
@@ -224,7 +224,7 @@ export default function RegulatoryClarity() {
             While we aim to reflect the latest updates accurately, this content does not constitute legal advice or official government positions.
             Always consult primary legal sources or qualified professionals before making decisions based on regulation-related content.
           </p>
-          
+
         </footer>
       </div>
     </div>

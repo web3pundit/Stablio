@@ -40,13 +40,13 @@ function BookmarkButton({ resourceId }) {
       navigate('/auth');
       return;
     }
-  
+
     setLoading(true);
-  
+
     // 🔍 Debug: Log Supabase session user ID
     const { data: sessionData} = await supabase.auth.getSession();
     ("Supabase auth session user ID:", sessionData?.session?.user?.id);
-  
+
     if (isBookmarked) {
       // 🔻 Remove bookmark
       const { error } = await supabase
@@ -54,7 +54,7 @@ function BookmarkButton({ resourceId }) {
         .delete()
         .eq('user_id', session.user.id)
         .eq('resource_id', resourceId);
-  
+
       if (error) {
         console.error('Supabase delete error:', error);
         toast.error('Failed to remove bookmark.');
@@ -68,11 +68,11 @@ function BookmarkButton({ resourceId }) {
         user_id: session.user.id,
         resource_id: resourceId
       });
-  
+
       const { error } = await supabase
         .from('resource_bookmarks')
         .insert([{ user_id: session.user.id, resource_id: resourceId }]);
-  
+
       if (error) {
         console.error('Supabase insert error:', error);
         toast.error('Failed to add bookmark.');
@@ -81,10 +81,10 @@ function BookmarkButton({ resourceId }) {
         toast.success('Bookmarked!');
       }
     }
-  
+
     setLoading(false);
   }
-  
+
 
   return (
     <button
@@ -92,18 +92,18 @@ function BookmarkButton({ resourceId }) {
       disabled={loading}
       className={`flex items-center ${isBookmarked ? 'text-yellow-500' : 'text-gray-400'}`}
     >
-      <svg 
+      <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-5 w-5" 
+        className="h-5 w-5"
         fill={isBookmarked ? "currentColor" : "none"}
-        viewBox="0 0 24 24" 
+        viewBox="0 0 24 24"
         stroke="currentColor"
       >
-        <path 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-          strokeWidth={2} 
-          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" 
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
         />
       </svg>
       <span className="ml-1">

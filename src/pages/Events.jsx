@@ -146,7 +146,7 @@ export default function Events() {
                       rel="noopener noreferrer"
                       className="link mt-3 inline-block"
                     >
-                      
+
                       View Details
                     </a>
                   </div>
@@ -191,7 +191,7 @@ export default function Events() {
           <p>
             <strong>Disclaimer:</strong> Event details are provided for informational purposes only. Please confirm event information with official sources before making plans or travel arrangements.
           </p>
-          
+
         </div>
       </main>
     </div>

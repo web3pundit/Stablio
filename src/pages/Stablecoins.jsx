@@ -81,14 +81,14 @@ export default function Stablecoins() {
   };
 
   // Helper for displaying arrays as comma-separated
-  
+
 
   return (
     <div className="page-container bg-muted">
       <Helmet>
-  <title>Stablecoins | Stablio</title> 
-  <meta name="description" content="Browse and compare stablecoins by type and backing. Find trusted, up-to-date information on leading crypto stablecoins." /> 
-</Helmet> 
+  <title>Stablecoins | Stablio</title>
+  <meta name="description" content="Browse and compare stablecoins by type and backing. Find trusted, up-to-date information on leading crypto stablecoins." />
+</Helmet>
       <div className="container">
         <h1 className="page-title text-center text-3xl font-bold mb-2">
           Explore and Compare Stablecoins

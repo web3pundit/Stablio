@@ -106,7 +106,7 @@ export default function Experts() {
           <p>
             <strong>Disclaimer:</strong> This directory is curated for informational purposes. The idivndividuals featured are included based on their public activity related to stablecoins. Roles assigned are observational and do not represent formal affiliations, endorsements, or professional validation. Always verify credentials independently before engaging with any expert.
           </p>
-          
+
         </div>
       </>
     </div>

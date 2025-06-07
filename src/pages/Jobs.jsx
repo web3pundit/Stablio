@@ -51,7 +51,7 @@ export default function Jobs() {
     }
   };
 
-  
+
   return (
     <div className="page-container bg-muted px-4 sm:px-6 lg:px-8">
       <Helmet>
